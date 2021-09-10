@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>customer</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+{% if call%}
+    <script>
+    alert("Transaction {{call}}");
+    location.replace("/customer")
+    </script>
+{% endif %}
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Spark Bank</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li class="active"><a href="#">Customer</a></li>
+                </ul>
+                 <ul class="nav navbar-nav navbar-right">
+                     <li><a href="#"><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#myModal">Transfer</button></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <center>
+        <div class="table-responsive">
+        <table class="table">
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Amount</th>
+        </tr>
+            {% for row in rows %}
+             <tr>
+                 <form action="/edit_department" method="POST">
+                    <td>{{ row['id'] }}</td>
+                    <td>{{ row['name'] }}</td>
+                    <td>{{ row['balance'] }}</td>
+                 </form>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </center>
+  <div class="container">
+
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+        <form method="POST" action="/transfer">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Transfer Money</h4>
+        </div>
+        <div class="modal-body">
+          <p><div class="input-group mb-3">From: <br><select class="form-select" name="from">
+              {% for row in rows %}<option value="{{row['id']}}">{{ row['name'] }}</option>{% endfor %}
+        </select></div>
+          </p>
+            <p><div class="input-group mb-3">To:<br><select class="form-select" name="to">
+              {% for row in rows %}<option value="{{row['id']}}"> {{ row['name'] }}</option>{% endfor %}
+        </select></div>
+          </p>
+            <div class="input-group mb-3">
+            <span class="input-group-text">Amount</span><input type="text" name="amount" class="form-control">
+            </div>
+                <input class="btn btn-primary" type="submit" value="Submit">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+        </form>
+    </div>
+  </div>
+  </div>
+</body>
+</html>
